@@ -1,41 +1,52 @@
 <template>
-    <Page>
-        <ActionBar>
-            <Label text="Home"/>
-        </ActionBar>
+  <Page>
+    <ActionBar>
+      <StackLayout orientation="horizontal">
+        <label text="ActionBar Title" fontSize="24" verticalAlignment="center"/>
+      </StackLayout>
+    </ActionBar>
 
-        <GridLayout>
-            <Label class="info">
-                <FormattedString>
-                    <Span class="fas" text.decode="&#xf135; "/>
-                    <Span :text="message"/>
-                </FormattedString>
-            </Label>
-        </GridLayout>
-    </Page>
+    <GridLayout>
+      <Button text="Button" @tap="goToSettings" />
+      <Label class="info">
+        <FormattedString>
+          <Span class="fas" text.decode="&#xf135; "/>
+          <Span :text="message"/>
+        </FormattedString>
+      </Label>
+    </GridLayout>
+  </Page>
 </template>
 
 <script>
-  export default {
-    computed: {
-      message() {
-        return "Blank {N}-Vue app";
-      }
+import Settings from './Settings'
+
+export default {
+  computed: {
+    message () {
+      return 'My Bloody Element'
     }
-  };
+  },
+  methods: {
+    goToSettings() {
+      console.log("Clicked!");
+      this.$navigateTo(Settings)
+    }
+  }
+}
 </script>
 
 <style scoped lang="scss">
-    @import '@nativescript/theme/scss/variables/blue';
+@import '@nativescript/theme/scss/variables/blue';
 
-    // Custom styles
-    .fas {
-        @include colorize($color: accent);
-    }
+// Custom styles
+.fas {
+  @include colorize($color: accent);
+}
 
-    .info {
-        font-size: 20;
-        horizontal-align: center;
-        vertical-align: center;
-    }
+.info {
+  font-size: 20;
+  horizontal-align: center;
+  vertical-align: center;
+}
 </style>
