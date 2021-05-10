@@ -1,36 +1,66 @@
 <template>
   <Page>
-    <ActionBar>
+    <ActionBar class="action-bar">
+      <NavigationButton text="Go back" android.systemIcon="ic_menu_edit" @tap="goToSettings" />
       <StackLayout orientation="horizontal">
-        <label text="ActionBar Title" fontSize="24" verticalAlignment="center"/>
+        <label class="action-label" text="Analytics" fontSize="24"/>
       </StackLayout>
     </ActionBar>
 
-    <GridLayout>
-      <Button text="Button" @tap="goToSettings" />
-      <Label class="info">
-        <FormattedString>
-          <Span class="fas" text.decode="&#xf135; "/>
-          <Span :text="message"/>
-        </FormattedString>
-      </Label>
-    </GridLayout>
+    <ScrollView orientation="vertical">
+      <ListView for="item in data" @itemTap="goReportDetails($event)">
+        <v-template>
+          <Label class="list-item" :text="item.name" />
+        </v-template>
+      </ListView>
+    </ScrollView>
   </Page>
 </template>
 
 <script>
 import Settings from './Settings'
+import ReportDetails from './ReportDetails'
+const base64 = require('base-64');
+const SecureStorage = require("@nativescript/secure-storage").SecureStorage;
+const secureStorage = new SecureStorage();
 
 export default {
-  computed: {
-    message () {
-      return 'My Bloody Element'
+  data() {
+    return {
+      data: {}
     }
   },
+  beforeMount(){
+    this.getReports();
+  },
   methods: {
-    goToSettings() {
-      console.log("Clicked!");
+    async getReports(){
+      const credentials = base64.encode(secureStorage.getSync({ key: "username" }) + ':' + secureStorage.getSync({ key: "password" }));
+      const headers = new Headers();
+      headers.append("OCS-APIRequest", "true");
+      headers.append("Content-Type", "application/json");
+      headers.append("Authorization", "Basic " + credentials);
+
+      let raw = "";
+      let requestOptions = {
+        method: 'GET',
+        headers: headers,
+        body: raw
+      };
+
+      const url = secureStorage.getSync({ key: "url" });
+      const res = await fetch(`${url}/apps/analytics/api/2.0/dataset/list`, requestOptions);
+      this.data = await res.json();
+    },
+    goToSettings () {
       this.$navigateTo(Settings)
+    },
+    goReportDetails (event) {
+      this.$navigateTo(ReportDetails, {
+        props: {
+          report: this.data[event.index],
+        }
+      });
     }
   }
 }

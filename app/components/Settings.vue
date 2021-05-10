@@ -1,33 +1,40 @@
 <template>
   <Page>
-    <ActionBar>
+    <ActionBar class="action-bar">
       <NavigationButton text="Go back" android.systemIcon="ic_menu_back" @tap="goToHome" />
       <StackLayout orientation="horizontal">
-        <Label text="Settings" fontSize="24" verticalAlignment="center"/>
+        <Label class="action-label" text="Settings" fontSize="24" verticalAlignment="center"/>
       </StackLayout>
+      <ActionItem
+          @tap="saveSettings"
+          ios.systemIcon="9"
+          ios.position="right"
+          android.systemIcon="ic_menu_save"
+          android.position="actionBar"
+      />
     </ActionBar>
 
-    <StackLayout class="page">
-      <TextField ref="url" class="input" hint="https://example.com/" secure="false" fontSize="18" />
-      <TextField ref="username" class="input" hint="Username" secure="true" fontSize="18" />
-      <TextField ref="password" class="input" hint="Password" secure="true" fontSize="18" />
-      <Button text="save" @tap="saveSettings" />
+    <StackLayout>
+      <TextField autocapitalizationType="none" ref="url" v-model="credentials.url" class="input" hint="https://example.com/" fontSize="18" />
+      <TextField autocapitalizationType="none" ref="username" v-model="credentials.username" class="input" hint="Username" fontSize="18" />
+      <TextField ref="password" v-model="credentials.password" class="input" hint="Password" secure="true" fontSize="18" />
     </StackLayout>
   </Page>
 </template>
 
 <script>
 import Home from './Home'
-let SecureStorage = require("nativescript-secure-storage").SecureStorage;
-let secureStorage = new SecureStorage();
+const SecureStorage = require("@nativescript/secure-storage").SecureStorage;
+const secureStorage = new SecureStorage();
 
 export default {
-  data: {
-    huhu: 'asdasdsa'
-  },
   computed: {
-    message () {
-      return 'My Bloody Element'
+    credentials() {
+      return {
+        url: secureStorage.getSync({ key: "url" }),
+        username: secureStorage.getSync({ key: "username" }),
+        password: secureStorage.getSync({ key: "password" })
+      }
     }
   },
   methods: {
@@ -35,18 +42,20 @@ export default {
       this.$navigateTo(Home)
     },
     saveSettings() {
-      //let prefs = new Preferences();
-      let success = secureStorage.setSync({
-        key: "foo",
-        value: "I was set at " + new Date()
+      secureStorage.setSync({
+        key: "url",
+        value: this.credentials.url
       });
 
-      // Set value
-      // Preferences.setValue("name_preference", "some new text");;
-      secureStorage.getSync({key: "foo"})
-      // Get existing value
-      // console.log(Preferences.getValue("name_preference"));
-      console.log('savasdadse...');
+      secureStorage.setSync({
+        key: "username",
+        value: this.credentials.username
+      });
+
+      secureStorage.setSync({
+        key: "password",
+        value: this.credentials.password
+      });
     }
   }
 }
@@ -55,14 +64,4 @@ export default {
 <style scoped lang="scss">
 @import '@nativescript/theme/scss/variables/blue';
 
-// Custom styles
-.fas {
-  @include colorize($color: accent);
-}
-
-.info {
-  font-size: 20;
-  horizontal-align: center;
-  vertical-align: center;
-}
 </style>

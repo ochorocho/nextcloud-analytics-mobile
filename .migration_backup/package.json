@@ -38,12 +38,10 @@
   ],
   "dependencies": {
     "@nativescript-community/preferences": "^1.2.6",
-    "@nativescript/core": "~8.0.0",
-    "@nativescript/secure-storage": "^3.0.0",
     "@nativescript/theme": "~3.0.1",
-    "base-64": "^1.0.0",
-    "nativescript-plugin-statusbar": "^1.0.19",
-    "nativescript-vue": "~2.9.0"
+    "nativescript-secure-storage": "^2.6.2",
+    "nativescript-vue": "~2.9.0",
+    "tns-core-modules": "^6.5.27"
   },
   "devDependencies": {
     "@nativescript/android": "8.0.0",
