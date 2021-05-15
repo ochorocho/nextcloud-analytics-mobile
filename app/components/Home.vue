@@ -59,7 +59,7 @@ export default {
       }
 
       const url = secureStorage.getSync({ key: 'url' })
-      const res = await fetch(`${url}/apps/analytics/api/2.0/dataset/list`, requestOptions)
+      const res = await fetch(`${url}/apps/analytics/api/3.0/datasets`, requestOptions)
       this.data = await res.json()
     },
     goToSettings () {
