@@ -1,10 +1,21 @@
 <template>
   <Page>
     <ActionBar class="action-bar">
-      <NavigationButton text="Go back" android.systemIcon="ic_menu_back" @tap="goToHome" />
+      <NavigationButton
+          @tap="goToHome"
+          icon.decode="font://&#xf053;"
+          class="fas action-bar-item"
+      />
       <StackLayout orientation="horizontal">
         <Label class="action-label" :text="this.report.name" fontSize="24"/>
       </StackLayout>
+      <ActionItem
+          @tap="saveSettings"
+          icon.decode="font://&#xf067;"
+          class="fas action-bar-item"
+          ios.position="right"
+          android.position="right"
+      />
     </ActionBar>
 
     <ScrollView orientation="vertical">
@@ -86,16 +97,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@nativescript/theme/scss/variables/blue';
 
-// Custom styles
-.fas {
-  @include colorize($color: accent);
-}
-
-.info {
-  font-size: 20;
-  horizontal-align: center;
-  vertical-align: center;
-}
 </style>

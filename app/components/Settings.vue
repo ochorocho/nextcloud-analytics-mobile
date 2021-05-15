@@ -1,20 +1,24 @@
 <template>
   <Page>
     <ActionBar class="action-bar">
-      <NavigationButton text="Go back" android.systemIcon="ic_menu_back" @tap="goToHome" />
+      <NavigationButton
+          @tap="goToHome"
+          icon.decode="font://&#xf053;"
+          class="fas action-bar-item"
+      />
       <StackLayout orientation="horizontal">
         <Label class="action-label" text="Settings" fontSize="24" verticalAlignment="center"/>
       </StackLayout>
       <ActionItem
           @tap="saveSettings"
-          ios.systemIcon="9"
+          icon.decode="font://&#xf0c7;"
+          class="fas action-bar-item"
           ios.position="right"
-          android.systemIcon="ic_menu_save"
-          android.position="actionBar"
+          android.position="right"
       />
     </ActionBar>
 
-    <StackLayout>
+    <StackLayout class="content">
       <TextField autocapitalizationType="none" ref="url" v-model="credentials.url" class="input" hint="https://example.com/" fontSize="18" />
       <TextField autocapitalizationType="none" ref="username" v-model="credentials.username" class="input" hint="Username" fontSize="18" />
       <TextField ref="password" v-model="credentials.password" class="input" hint="Password" secure="true" fontSize="18" />
@@ -62,6 +66,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@nativescript/theme/scss/variables/blue';
+//@import '@nativescript/theme/scss/variables/blue';
 
 </style>

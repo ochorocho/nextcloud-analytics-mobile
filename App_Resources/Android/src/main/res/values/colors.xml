@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="background">#FF0000</color>
+    <color name="background">#21a5ee</color>
     <color name="ns_primary">#F5F5F5</color>
 	<color name="ns_primaryDark">#757575</color>
 	<color name="ns_accent">#65ADF1</color>

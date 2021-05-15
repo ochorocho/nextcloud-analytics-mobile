@@ -1,5 +1,5 @@
-@import '@nativescript/theme/core';
-@import '@nativescript/theme/default';
+//@import '@nativescript/theme/core';
+//@import '@nativescript/theme/default';
 
 // Place any CSS rules you want to apply on both iOS and Android here.
 // This is where the vast majority of your CSS code goes.
@@ -9,13 +9,17 @@ $white: #ffffff;
 $font-size-list: 24px;
 
 .action-bar {
-  margin: 0;
   padding: 0;
+  margin: 0;
   background-color: $nc-blue;
 }
 
-ListView {
+.list-item {
   separator-color: $nc-blue;
+}
+
+ListView {
+  separator-color: transparent;
 
   Label {
     border-bottom-color: transparent;
@@ -29,4 +33,51 @@ ListView {
 }
 
 .list-item {
+}
+
+.far {
+  font-family: Font Awesome 5 Free, fa-regular-400;
+  font-weight: 400;
+}
+
+.fab {
+  font-family: Font Awesome 5 Brands, fa-brands-400;
+  font-weight: 400;
+}
+
+.fas {
+  font-family: Font Awesome 5 Free, fa-solid-900;
+  font-weight: 900;
+  font-size: $font-size-list;
+  color: #ffffff;
+}
+
+Image {
+  color: #ffffff;
+}
+
+TextField {
+  margin: 20px 40px;
+  border-bottom-color: $nc-blue;
+  border-bottom-width: 2px;
+}
+
+ListView {
+  separator-color: $nc-blue;
+
+  Label {
+    padding: 15vw 10vw;
+  }
+}
+
+.content {
+  margin: 100px 0;
+}
+
+.action-bar-item {
+  font-size: 8px;
+}
+
+.ns-ios .action-bar-item {
+  font-size: 28px;
 }
