@@ -1,6 +1,5 @@
 <template>
   <Page androidStatusBarBackground="#21a5ee" backgroundSpanUnderStatusBar="#ff0000">
-
     <ActionBar class="action-bar">
       <StackLayout orientation="horizontal">
         <Label class="action-label" text="Analytics" fontSize="24"/>
@@ -12,13 +11,15 @@
           icon.decode="font://&#xf085;"
           class="fas action-bar-item" />
     </ActionBar>
-
-    <ScrollView orientation="vertical">
-        <ListView for="item in data" @itemTap="goReportDetails($event)">
+    <ScrollView orientation="vertical" height="100%">
+      <StackLayout orientation="vertical" height="100%">
+        <ActivityIndicator :visibility="activityState" class="loading" busy="true"/>
+        <ListView for="item in datasets" @itemTap="goReportDetails($event)">
           <v-template if="item.name">
             <Label class="list-item" :text="item.name"/>
           </v-template>
         </ListView>
+      </StackLayout>
     </ScrollView>
   </Page>
 </template>
@@ -26,15 +27,14 @@
 <script>
 import Settings from './Settings'
 import ReportDetails from './ReportDetails'
-
-const base64 = require('base-64')
-const SecureStorage = require('@nativescript/secure-storage').SecureStorage
-const secureStorage = new SecureStorage()
+import { apiRequest } from '~/modules/apiRequest'
+import { isOnline } from '~/modules/utils'
 
 export default {
   data () {
     return {
-      data: {}
+      datasets: {},
+      activityState: 'visible'
     }
   },
   beforeMount () {
@@ -44,23 +44,15 @@ export default {
     onButtonTap () {
       console.log('Button was pressed')
     },
-    async getReports () {
-      const credentials = base64.encode(secureStorage.getSync({ key: 'username' }) + ':' + secureStorage.getSync({ key: 'password' }))
-      const headers = new Headers()
-      headers.append('OCS-APIRequest', 'true')
-      headers.append('Content-Type', 'application/json')
-      headers.append('Authorization', 'Basic ' + credentials)
-
-      let raw = ''
-      let requestOptions = {
-        method: 'GET',
-        headers: headers,
-        body: raw
+    getReports () {
+      if(!isOnline()) {
+        return;
       }
-
-      const url = secureStorage.getSync({ key: 'url' })
-      const res = await fetch(`${url}/apps/analytics/api/3.0/datasets`, requestOptions)
-      this.data = await res.json()
+      let api = new apiRequest('/apps/analytics/api/3.0/datasets')
+      api.get().then((response) => {
+        this.datasets = response.content.toJSON();
+        this.activityState = 'collapsed';
+      });
     },
     goToSettings () {
       this.$navigateTo(Settings)
@@ -68,7 +60,7 @@ export default {
     goReportDetails (event) {
       this.$navigateTo(ReportDetails, {
         props: {
-          report: this.data[event.index],
+          report: this.datasets[event.index],
         }
       })
     }

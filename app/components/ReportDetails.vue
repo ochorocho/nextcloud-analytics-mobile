@@ -19,30 +19,33 @@
     </ActionBar>
 
     <ScrollView orientation="vertical">
-      <ListView for="item in data">
-        <v-template>
-          <GridLayout rows="auto" columns="*">
-            <Label horizontalAlignment="left" class="list-item" :text="item[0]" />
-            <Label horizontalAlignment="center" class="list-item" :text="item[1]" />
-            <Label horizontalAlignment="right" class="list-item" :text="item[2]" />
-          </GridLayout>
-        </v-template>
-      </ListView>
+      <StackLayout orientation="vertical" height="100%">
+        <ActivityIndicator :visibility="activityState" class="loading" busy="true"/>
+        <ListView for="item in data">
+          <v-template>
+            <GridLayout rows="auto" columns="*">
+              <Label horizontalAlignment="left" class="list-item" :text="item[0]" />
+              <Label horizontalAlignment="center" class="list-item" :text="item[1]" />
+              <Label horizontalAlignment="right" class="list-item" :text="item[2]" />
+            </GridLayout>
+          </v-template>
+        </ListView>
+      </StackLayout>
     </ScrollView>
   </Page>
 </template>
 
 <script>
 import Home from '~/components/Home'
-const base64 = require('base-64');
-const SecureStorage = require("@nativescript/secure-storage").SecureStorage;
-const secureStorage = new SecureStorage();
+import { apiRequest } from '~/modules/apiRequest'
+import { isOnline } from '~/modules/utils'
 
 export default {
   props: ['report'],
   data() {
     return {
-      data: {}
+      data: {},
+      activityState: 'visible'
     }
   },
   beforeMount(){
@@ -50,45 +53,20 @@ export default {
   },
 
   methods: {
-    async getData() {
-      const credentials = base64.encode(secureStorage.getSync({ key: "username" }) + ':' + secureStorage.getSync({ key: "password" }));
-      const headers = new Headers();
-      headers.append("OCS-APIRequest", "true");
-      headers.append("Content-Type", "application/json");
-      headers.append("Authorization", "Basic " + credentials);
+    getData() {
+      if(!isOnline()) {
+        return;
+      }
 
-      let raw = "";
-      let requestOptions = {
-        method: 'GET',
-        headers: headers,
-        body: raw
-      };
-
-      const url = secureStorage.getSync({ key: "url" });
-      const res = await fetch(`${url}/apps/analytics/api/3.0/data/${this.report.id}`, requestOptions);
-      this.data = await res.json();
+      let api = new apiRequest(`/apps/analytics/api/3.0/data/${this.report.id}`)
+      api.get().then((response) => {
+        this.data = response.content.toJSON();
+        this.activityState = 'collapsed';
+      });
     },
     goToHome() {
       this.$navigateTo(Home)
     },
-    // async getReports(){
-    //   const credentials = base64.encode(secureStorage.getSync({ key: "username" }) + ':' + secureStorage.getSync({ key: "password" }));
-    //   const headers = new Headers();
-    //   headers.append("OCS-APIRequest", "true");
-    //   headers.append("Content-Type", "application/json");
-    //   headers.append("Authorization", "Basic " + credentials);
-    //
-    //   let raw = "";
-    //   let requestOptions = {
-    //     method: 'GET',
-    //     headers: headers,
-    //     body: raw
-    //   };
-    //
-    //   const url = secureStorage.getSync({ key: "url" });
-    //   const res = await fetch(`${url}/apps/analytics/api/2.0/dataset/list`, requestOptions);
-    //   this.data = await res.json();
-    // },
     goToSettings () {
       // this.$navigateTo(Settings)
     }

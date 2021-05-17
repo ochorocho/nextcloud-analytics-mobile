@@ -46,6 +46,7 @@
     "clean-webpack-plugin": "^4.0.0-alpha.0",
     "copy-webpack-plugin": "^8.1.1",
     "fork-ts-checker-webpack-plugin": "^6.2.7",
+    "nativescript-awesome-loaders": "^1.2.1",
     "nativescript-plugin-statusbar": "^1.0.19",
     "nativescript-vue": "~2.9.0",
     "terser-webpack-plugin": "^5.1.1"
