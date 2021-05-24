@@ -41,17 +41,18 @@ export default {
     this.getReports()
   },
   methods: {
-    onButtonTap () {
-      console.log('Button was pressed')
-    },
     getReports () {
       if(!isOnline()) {
+        alert('Seems you are offline');
         return;
       }
       let api = new apiRequest('/apps/analytics/api/3.0/datasets')
       api.get().then((response) => {
         this.datasets = response.content.toJSON();
         this.activityState = 'collapsed';
+      }).catch((e) => {
+        alert('Please check credentials');
+        this.goToSettings()
       });
     },
     goToSettings () {
@@ -70,9 +71,4 @@ export default {
 
 <style scoped lang="scss">
 
-.info {
-  font-size: 20;
-  horizontal-align: center;
-  vertical-align: center;
-}
 </style>

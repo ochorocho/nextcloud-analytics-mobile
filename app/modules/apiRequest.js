@@ -17,7 +17,7 @@ export class apiRequest {
     let request = Http.request(this.getOptions());
     request.then((response) => {
       //console.log('Within request ...');
-    })
+    });
     return request;
   }
 

@@ -85,3 +85,8 @@ ListView {
 .ns-ios .action-bar-item {
   font-size: 28px;
 }
+
+Button {
+  background-color: $nc-blue;
+  color: $white;
+}
